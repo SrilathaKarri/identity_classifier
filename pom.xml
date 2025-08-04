@@ -5,7 +5,7 @@
 
   <groupId>com.achalahealth.carestack-staging</groupId>
   <artifactId>carestack-staging</artifactId>
-  <version>1.1.6</version>
+  <version>1.1.9</version>
   <packaging>jar</packaging>
 
   <name>carestack</name>
@@ -290,22 +290,9 @@
           <windowtitle>carestack</windowtitle>
           <doclint>none</doclint>
           <failOnError>false</failOnError>
-          <sourceFileExcludes>
-            <exclude>**/dto/**/*.java</exclude>
-            <exclude>**/base/**/*.java</exclude>
-            <exclude>**/dtos/**/*.java</exclude>
-            <exclude>**/DTO/**/*.java</exclude>
-            <exclude>**/errors/**/*.java</exclude>
-            <exclude>**/mappers/**/*.java</exclude>
-            <exclude>**/utils/**/*.java</exclude>
-            <exclude>**/config/**/*.java</exclude>
-            <exclude>**/validators/**/*.java</exclude>
-            <exclude>**/EncryptionUtilities.java</exclude>
-            <exclude>**/DTO.java</exclude>
-          </sourceFileExcludes>
         </configuration>
         <executions>
-          <!-- Execution for generating browsable documentation -->
+          <!-- Execution for generating the browsable HTML documentation site -->
           <execution>
             <id>generate-docs</id>
             <phase>site</phase>
@@ -313,10 +300,24 @@
               <goal>javadoc</goal>
             </goals>
             <configuration>
+              <!-- MOVE the excludes here, so they only apply to this execution -->
+              <sourceFileExcludes>
+                <exclude>**/dto/**/*.java</exclude>
+                <exclude>**/base/**/*.java</exclude>
+                <exclude>**/dtos/**/*.java</exclude>
+                <exclude>**/DTO/**/*.java</exclude>
+                <exclude>**/errors/**/*.java</exclude>
+                <exclude>**/mappers/**/*.java</exclude>
+                <exclude>**/utils/**/*.java</exclude>
+                <exclude>**/config/**/*.java</exclude>
+                <exclude>**/validators/**/*.java</exclude>
+                <exclude>**/EncryptionUtilities.java</exclude>
+                <exclude>**/PractitionerDTO.java</exclude>
+              </sourceFileExcludes>
             </configuration>
           </execution>
 
-          <!-- Execution for creating Javadoc jar for SDK  -->
+          <!-- Execution for creating the Javadoc JAR for Maven Central (for IDEs) -->
           <execution>
             <id>attach-javadocs</id>
             <phase>package</phase>
@@ -324,6 +325,7 @@
               <goal>jar</goal>
             </goals>
             <configuration>
+              <!-- This execution now has no excludes and will include all Javadocs -->
               <additionalOptions>
                 <additionalOption>-Xdoclint:none</additionalOption>
                 <additionalOption>-quiet</additionalOption>

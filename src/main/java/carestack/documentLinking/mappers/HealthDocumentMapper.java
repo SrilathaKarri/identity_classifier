@@ -26,7 +26,7 @@ import java.util.List;
  * <h3>Key Features:</h3>
  * <ul>
  *   <li><strong>DTO Mappings:</strong> Maps a health document linking data to appointment, care context, consultation, and link care context DTOs.</li>
- *   <li><strong>Date & Time Formatting:</strong> Handles complex date/time formatting, including validation for invalid dates.</li>
+ *   <li><strong>Date, Time Formatting:</strong> Handles complex date/time formatting, including validation for invalid dates.</li>
  *   <li><strong>Null Handling:</strong> Ensures null-safe mapping for optional fields like mobile numbers and health records.</li>
  * </ul>
  */
