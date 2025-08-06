@@ -35,7 +35,6 @@ import java.util.*;
  * Services should extend this class to inherit this foundational behavior.
  * </p>
  */
-@Service
 public abstract class Base {
 
     @Autowired

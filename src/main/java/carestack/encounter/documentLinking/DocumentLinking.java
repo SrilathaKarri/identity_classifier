@@ -29,7 +29,6 @@ import java.util.regex.Pattern;
  * information upon failure.
  * </p>
  */
-@Service
 public class DocumentLinking extends Base {
 
     private static final Logger logger = LoggerFactory.getLogger(DocumentLinking.class);

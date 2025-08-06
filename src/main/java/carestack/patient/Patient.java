@@ -35,7 +35,6 @@ import carestack.patient.enums.PatientType;
  * </ul>
  * </p>
  */
-@Service
 public class Patient extends Base implements ResourceService<PatientDTO, UpdatePatientDTO> {
 
     private static final ResourceType RESOURCE_TYPE = ResourceType.Patient;

@@ -36,7 +36,6 @@ import carestack.base.utils.StringUtils;
  * </ul>
  * </p>
  */
-@Service
 public class Practitioner extends Base implements ResourceService<PractitionerDTO, PractitionerDTO> {
 
     private static final ResourceType RESOURCE_TYPE = ResourceType.Practitioner;

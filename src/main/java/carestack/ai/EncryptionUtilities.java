@@ -35,7 +35,6 @@ import java.util.Map;
  * </ul>
  * The class relies on certificates configured in the application properties for sourcing public keys.
  */
-@Component
 public class EncryptionUtilities {
 
     private final ObjectMapper objectMapper;

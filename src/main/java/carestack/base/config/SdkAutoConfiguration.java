@@ -116,7 +116,7 @@ import carestack.practitioner.Practitioner;
 import carestack.practitioner.hpr.Hpr;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Validator;
-import org.springframework.beans.factory.annotation.Autowired; // 1. Add this import
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory; // 2. Add this import
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -177,10 +177,8 @@ public class SdkAutoConfiguration {
     @ConditionalOnMissingBean
     public Organization organization(ObjectMapper objectMapper,
                                      WebClient webClient,
-                                     @Value("${google.api.key:#{null}}") String userGoogleApiKey,
-                                     Demographic demographic,
-                                     EmbeddedSdkProperties embeddedProperties) {
-        return autowire(new Organization(objectMapper, webClient, userGoogleApiKey, demographic, embeddedProperties));
+                                     Demographic demographic) {
+        return autowire(new Organization(objectMapper, webClient, demographic));
     }
 
     @Bean
@@ -214,4 +212,6 @@ public class SdkAutoConfiguration {
     public Mapper mapper() {
         return new Mapper();
     }
+
+
 }

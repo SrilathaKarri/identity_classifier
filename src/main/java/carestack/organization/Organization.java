@@ -2,6 +2,7 @@ package carestack.organization;
 
 import carestack.base.config.EmbeddedSdkProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,12 +42,9 @@ import java.util.Map;
  * implement the generic {@code ResourceService} interface.
  * </p>
  */
-@Service
 public class Organization extends Base {
 
-    private final String googleApiKey;
     private final Demographic demographic;
-    private final WebClient webClient;
 
     /**
      * Constructs the Organization service with its dependencies.
@@ -56,22 +54,30 @@ public class Organization extends Base {
      * @param userGoogleApiKey The API key for Google services, injected from properties.
      * @param demographic  The service for handling demographic-related API calls.
      */
+
+    @Value("${google.api.key:#{null}}")
+    private String userGoogleApiKey;
+
     @Autowired
-    public Organization(ObjectMapper objectMapper,
-                        WebClient webClient,
-                        @Value("${google.api.key:#{null}}") String userGoogleApiKey,
-                        Demographic demographic,
-                        EmbeddedSdkProperties embeddedProperties) {
+    private EmbeddedSdkProperties embeddedProperties;
+
+    private String googleApiKey;
+
+    // Keep a simple constructor for core dependencies
+    public Organization(ObjectMapper objectMapper, WebClient webClient, Demographic demographic) {
         super(objectMapper, webClient);
         this.demographic = demographic;
-        this.webClient = webClient;
+    }
 
-        if (userGoogleApiKey != null && !userGoogleApiKey.trim().isEmpty()) {
-            this.googleApiKey = userGoogleApiKey;
+    @PostConstruct
+    private void initialize() {
+        if (this.userGoogleApiKey != null && !this.userGoogleApiKey.trim().isEmpty()) {
+            this.googleApiKey = this.userGoogleApiKey;
         } else {
-            this.googleApiKey = embeddedProperties.getGoogleApiKey();
+            this.googleApiKey = this.embeddedProperties.getGoogleApiKey();
         }
     }
+
 
 
     /**

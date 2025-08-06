@@ -38,7 +38,6 @@ import java.util.Set;
  * The service leverages Spring's reactive {@link WebClient} for non-blocking API communication and Jakarta Bean Validation
  * for robust input validation.
  */
-@Service
 public class AiService extends Base {
 
     @Autowired

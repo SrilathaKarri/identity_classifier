@@ -38,7 +38,6 @@ import java.util.stream.Collectors;
  *
  * @see HprSteps For the definition of each step in the registration flow.
  */
-@Service
 public class Hpr extends Base {
 
     private final Validator validator;

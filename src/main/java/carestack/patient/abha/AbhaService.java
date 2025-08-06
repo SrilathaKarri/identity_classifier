@@ -46,7 +46,6 @@ import static carestack.base.utils.Constants.*;
  *
  * The primary entry point is the {@link #createAbha(AbhaSteps, Object)} method, which dispatches requests to the appropriate handler based on the current step.
  */
-@Service
 public class AbhaService extends Base {
 
     @Autowired

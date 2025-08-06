@@ -25,7 +25,6 @@ import java.util.Map;
  *
  * @see WebClient
  */
-@Service
 public class Demographic extends Base {
 
     @Autowired

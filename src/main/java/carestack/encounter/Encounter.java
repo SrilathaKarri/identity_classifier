@@ -50,7 +50,6 @@ import java.util.stream.Collectors;
  * By handling these two distinct workflows, the {@code Encounter} service provides a powerful and flexible tool
  * for achieving interoperability in healthcare data exchange.
  */
-@Service
 public class Encounter extends Base {
 
     private final Validator validator;

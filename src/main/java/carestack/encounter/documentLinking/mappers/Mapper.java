@@ -17,7 +17,6 @@ import carestack.encounter.documentLinking.dto.*;
  *   <li><strong>Spring Integration:</strong> Annotated with {@link Component} for dependency injection.</li>
  * </ul>
  */
-@Component
 public class Mapper {
 
     /**
