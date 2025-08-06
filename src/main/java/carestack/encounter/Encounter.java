@@ -1,5 +1,6 @@
 package carestack.encounter;
 
+import carestack.encounter.documentLinking.DocumentLinking;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.ConstraintViolation;
@@ -60,11 +61,15 @@ public class Encounter extends Base {
     @Autowired
     private AiService aiService;
 
+    public final DocumentLinking documentLinking;
+
     public Encounter(ObjectMapper objectMapper,
                      WebClient webClient,
-                     Validator validator) {
+                     Validator validator,
+                     DocumentLinking documentLinking) {
         super(objectMapper, webClient);
         this.validator = validator;
+        this.documentLinking = documentLinking;
     }
 
     /**

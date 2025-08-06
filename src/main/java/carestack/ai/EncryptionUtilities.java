@@ -203,7 +203,7 @@ public class EncryptionUtilities {
      * <h3>Workflow:</h3>
      * <ol>
      *     <li>Loads the {@link PublicKey} from the provided PEM string.</li>
-     *     <li>Initializes a {@link javax.crypto.Cipher} instance with the `RSA/ECB/OAEPWithSHA-1AndMGF1Padding` transformation.</li>
+     *     <li>Initializes a {@link Cipher} instance with the `RSA/ECB/OAEPWithSHA-1AndMGF1Padding` transformation.</li>
      *     <li>Encrypts the UTF-8 bytes of the {@code dataToEncrypt} string.</li>
      *     <li>Encodes the resulting ciphertext into a Base64 string.</li>
      * </ol>

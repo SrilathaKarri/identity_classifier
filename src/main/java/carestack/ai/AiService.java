@@ -228,7 +228,7 @@ public class AiService extends Base {
                         payload.setFiles(processDSDto.getFiles());
                         payload.setPublicKey(processDSDto.getPublicKey());
                         payload.setEncryptedData(encryptedData != null ? encryptedData : processDSDto.getEncryptedData());
-                        payload.setCaseType(carestack.base.enums.CaseType.OP_CONSULTATION);
+                        payload.setCaseType(CaseType.OP_CONSULTATION);
 
                         return payload;
 

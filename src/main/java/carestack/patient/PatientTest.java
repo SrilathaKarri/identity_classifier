@@ -32,8 +32,6 @@ import static org.mockito.BDDMockito.*;
 @MockitoSettings(strictness = Strictness.WARN)
  class PatientTest {
 
-    @Mock private WebClient webClient;
-
     @Spy
     @InjectMocks
     private Patient patient;

@@ -35,7 +35,7 @@ import static org.mockito.BDDMockito.*;
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        encounter = new Encounter(objectMapper, null, validator);
+        encounter = new Encounter(objectMapper, null, validator,null);
         encounter.encryptionUtilities = encryptionUtilities;
     }
 

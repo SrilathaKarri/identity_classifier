@@ -1,10 +1,8 @@
 package carestack.patient;
 
+import carestack.patient.abha.AbhaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.validation.Valid;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import carestack.base.Base;
@@ -38,13 +36,16 @@ import carestack.patient.enums.PatientType;
  * </p>
  */
 @Service
-@Validated
 public class Patient extends Base implements ResourceService<PatientDTO, UpdatePatientDTO> {
 
     private static final ResourceType RESOURCE_TYPE = ResourceType.Patient;
 
-    protected Patient(ObjectMapper objectMapper, WebClient webClient) {
+    public final AbhaService abha;
+
+    public Patient(ObjectMapper objectMapper, WebClient webClient, AbhaService abhaService
+                   ) {
         super(objectMapper, webClient);
+        this.abha = abhaService;
     }
 
     /**
@@ -102,7 +103,6 @@ public class Patient extends Base implements ResourceService<PatientDTO, UpdateP
      * The method requires a non-null, non-empty patient ID string. This is validated by the base handler.
      *
      * <h3>Caching:</h3>
-     * This method is cached using Spring's {@link Cacheable} annotation. Successful responses are stored in the
      * {@code patientCache} with a key format of {@code 'patient-{id}'}. Further calls with the same ID will
      * return the cached result, improving performance and reducing redundant API calls.
      *
@@ -132,7 +132,6 @@ public class Patient extends Base implements ResourceService<PatientDTO, UpdateP
      * @return A {@link Mono} emitting the patient's details.
      */
     @Override
-    @Cacheable(value = "patientCache", key = "'patient-' + #id")
     public Mono<Object> findById(String id) {
         return handleFindById(RESOURCE_TYPE, id);
     }
@@ -246,7 +245,7 @@ public class Patient extends Base implements ResourceService<PatientDTO, UpdateP
      * @param patient The {@link PatientDTO} object containing the new patient's details. Must not be null and must be valid.
      */
     @Override
-    public Mono<Object> create(@Valid PatientDTO patient) {
+    public Mono<Object> create( PatientDTO patient) {
         if (patient == null) {
             return Mono.error(new ValidationError("Patient data cannot be null."));
         }
@@ -312,7 +311,7 @@ public class Patient extends Base implements ResourceService<PatientDTO, UpdateP
      *
      */
     @Override
-    public Mono<Object> update(@Valid UpdatePatientDTO updatePatientData) {
+    public Mono<Object> update( UpdatePatientDTO updatePatientData) {
         if (updatePatientData == null) {
             return Mono.error(new ValidationError("Update patient data cannot be null."));
         }
@@ -446,7 +445,7 @@ public class Patient extends Base implements ResourceService<PatientDTO, UpdateP
      * @param updatePatientData The DTO to validate.
      * @throws ValidationError if the resource ID is missing.
      */
-    private void validateUpdatePatient(@Valid UpdatePatientDTO updatePatientData) {
+    private void validateUpdatePatient( UpdatePatientDTO updatePatientData) {
         if (StringUtils.isNullOrEmpty(updatePatientData.getResourceId())) {
             throw new ValidationError("Resource ID is required for updating a patient.");
         }

@@ -1,10 +1,8 @@
 package carestack.practitioner;
 
+import carestack.practitioner.hpr.Hpr;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.validation.Valid;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import carestack.base.Base;
@@ -39,13 +37,15 @@ import carestack.base.utils.StringUtils;
  * </p>
  */
 @Service
-@Validated
 public class Practitioner extends Base implements ResourceService<PractitionerDTO, PractitionerDTO> {
 
     private static final ResourceType RESOURCE_TYPE = ResourceType.Practitioner;
 
-    protected Practitioner(ObjectMapper objectMapper, WebClient webClient) {
+    public final Hpr hpr;
+
+    public Practitioner(ObjectMapper objectMapper, WebClient webClient, Hpr hpr) {
         super(objectMapper, webClient);
+        this.hpr = hpr;
     }
 
     /**
@@ -103,7 +103,6 @@ public class Practitioner extends Base implements ResourceService<PractitionerDT
      * The method requires a non-null, non-empty practitioner ID string. This is validated by the base handler.
      *
      * <h3>Caching:</h3>
-     * This method is cached using Spring's {@link Cacheable} annotation. Successful responses are stored in the
      * {@code practitionerCache} with a key format of {@code 'practitioner-{id}'}. Further calls with the same ID will
      * return the cached result, improving performance and reducing redundant API calls.
      *
@@ -134,7 +133,6 @@ public class Practitioner extends Base implements ResourceService<PractitionerDT
       * @return A {@link Mono} emitting the practitioner's details.
      */
     @Override
-    @Cacheable(value = "practitionerCache", key = "'practitioner-' + #id")
     public Mono<Object> findById(String id) {
         return handleFindById(RESOURCE_TYPE, id);
     }
@@ -244,7 +242,7 @@ public class Practitioner extends Base implements ResourceService<PractitionerDT
      * @param practitioner The {@link PractitionerDTO} object containing the new practitioner's details. Must not be null and must be valid.
      */
     @Override
-    public Mono<Object> create(@Valid PractitionerDTO practitioner) {
+    public Mono<Object> create( PractitionerDTO practitioner) {
         if (practitioner == null) {
             return Mono.error(new ValidationError("Practitioner data cannot be null."));
         }
@@ -320,7 +318,7 @@ public class Practitioner extends Base implements ResourceService<PractitionerDT
      *  @param updatePractitionerData The DTO containing the fields to update.
      */
     @Override
-    public Mono<Object> update(@Valid PractitionerDTO updatePractitionerData) {
+    public Mono<Object> update( PractitionerDTO updatePractitionerData) {
         if (updatePractitionerData == null) {
             return Mono.error(new ValidationError("Update practitioner data cannot be null."));
         }
