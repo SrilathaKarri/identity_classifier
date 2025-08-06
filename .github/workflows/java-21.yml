@@ -141,68 +141,68 @@ jobs:
         
         echo "Deployment published successfully"
 
-    - name: Generate Documentation
-      if: success()
-      run: |
-        echo "Generating Javadoc documentation..."
-        mvn javadoc:javadoc -q
+    # - name: Generate Documentation
+    #   if: success()
+    #   run: |
+    #     echo "Generating Javadoc documentation..."
+    #     mvn javadoc:javadoc -q
 
-        if [ ! -d "target/site/apidocs" ]; then
-          echo "Error: Documentation not generated - apidocs folder not found!"
-          exit 1
-        fi
+    #     if [ ! -d "target/site/apidocs" ]; then
+    #       echo "Error: Documentation not generated - apidocs folder not found!"
+    #       exit 1
+    #     fi
 
-        if [ ! -f "target/site/apidocs/index.html" ]; then
-          echo "Error: index.html not found in generated documentation!"
-          exit 1
-        fi
+    #     if [ ! -f "target/site/apidocs/index.html" ]; then
+    #       echo "Error: index.html not found in generated documentation!"
+    #       exit 1
+    #     fi
 
-        echo "Documentation generated successfully"
-        ls -la target/site/apidocs/
+    #     echo "Documentation generated successfully"
+    #     ls -la target/site/apidocs/
 
-    - name: Configure AWS credentials
-      if: success()
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
+    # - name: Configure AWS credentials
+    #   if: success()
+    #   uses: aws-actions/configure-aws-credentials@v4
+    #   with:
+    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     aws-region: ${{ secrets.AWS_REGION }}
 
-    - name: Upload Documentation to S3
-      if: success()
-      run: |
-        echo "Uploading documentation to S3..."
+    # - name: Upload Documentation to S3
+    #   if: success()
+    #   run: |
+    #     echo "Uploading documentation to S3..."
     
-        S3_BUCKET="${{ secrets.S3_DOCS_BUCKET }}"
-        DOCS_DIR="target/site/apidocs"
+    #     S3_BUCKET="${{ secrets.S3_DOCS_BUCKET }}"
+    #     DOCS_DIR="target/site/apidocs"
     
-        if [ -z "$S3_BUCKET" ]; then
-          echo "Error: S3_DOCS_BUCKET secret not set!"
-          exit 1
-        fi
+    #     if [ -z "$S3_BUCKET" ]; then
+    #       echo "Error: S3_DOCS_BUCKET secret not set!"
+    #       exit 1
+    #     fi
     
-        if [ ! -d "$DOCS_DIR" ]; then
-          echo "Error: Documentation directory not found!"
-          exit 1
-        fi
+    #     if [ ! -d "$DOCS_DIR" ]; then
+    #       echo "Error: Documentation directory not found!"
+    #       exit 1
+    #     fi
     
-        aws s3 rm "s3://$S3_BUCKET/" --recursive
-        aws s3 sync "$DOCS_DIR" "s3://$S3_BUCKET/" --delete
+    #     aws s3 rm "s3://$S3_BUCKET/" --recursive
+    #     aws s3 sync "$DOCS_DIR" "s3://$S3_BUCKET/" --delete
     
-        echo "Documentation uploaded successfully to S3 bucket: $S3_BUCKET"
+    #     echo "Documentation uploaded successfully to S3 bucket: $S3_BUCKET"
     
-        S3_WEBSITE_URL="http://$S3_BUCKET.s3-website-${{ secrets.AWS_REGION }}.amazonaws.com"
-        echo "S3_WEBSITE_URL=$S3_WEBSITE_URL" >> $GITHUB_ENV
-        echo "Documentation available at: $S3_WEBSITE_URL"
+    #     S3_WEBSITE_URL="http://$S3_BUCKET.s3-website-${{ secrets.AWS_REGION }}.amazonaws.com"
+    #     echo "S3_WEBSITE_URL=$S3_WEBSITE_URL" >> $GITHUB_ENV
+    #     echo "Documentation available at: $S3_WEBSITE_URL"
 
-    - name: Invalidate CloudFront Cache (Optional)
-      if: success() && vars.CLOUDFRONT_DISTRIBUTION_ID != ''
-      run: |
-        echo "Invalidating CloudFront cache..."
-        aws cloudfront create-invalidation \
-          --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} \
-          --paths "/*"
-        echo "CloudFront cache invalidation initiated"
+    # - name: Invalidate CloudFront Cache (Optional)
+    #   if: success() && vars.CLOUDFRONT_DISTRIBUTION_ID != ''
+    #   run: |
+    #     echo "Invalidating CloudFront cache..."
+    #     aws cloudfront create-invalidation \
+    #       --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} \
+    #       --paths "/*"
+    #     echo "CloudFront cache invalidation initiated"
 
     - name: Complete Publishing to Maven Central
       if: success()
@@ -210,11 +210,11 @@ jobs:
       with:
         script: |
           const url = "https://central.sonatype.com/publishing/deployments";
-          const docsUrl = process.env.S3_WEBSITE_URL || "S3 bucket configured in secrets";
+          # const docsUrl = process.env.S3_WEBSITE_URL || "S3 bucket configured in secrets";
           console.log(`Publishing completed. Visit ${url} to verify the deployment was successful.`);
-          console.log(`Documentation updated at: ${docsUrl}`);
+          # console.log(`Documentation updated at: ${docsUrl}`);
           core.notice(`SDK successfully published to Maven Central! Visit ${url} to verify.`);
-          core.notice(`Documentation updated and available at: ${docsUrl}`);
+          # core.notice(`Documentation updated and available at: ${docsUrl}`);
 
     - name: Post-deployment Summary
       if: always()
@@ -225,11 +225,11 @@ jobs:
         if [ "${{ job.status }}" == "success" ]; then
           echo "SDK successfully published to Maven Central"
           echo "Documentation generated and uploaded to S3"
-          echo "Documentation URL: ${{ env.S3_WEBSITE_URL }}"
+          # echo "Documentation URL: ${{ env.S3_WEBSITE_URL }}"
           echo ""
           echo "Next steps:"
           echo "1. Verify deployment at: https://central.sonatype.com/publishing/deployments"
-          echo "2. Check documentation at: ${{ env.S3_WEBSITE_URL }}"
+          # echo "2. Check documentation at: ${{ env.S3_WEBSITE_URL }}"
         else
           echo "Deployment failed - check logs above"
         fi
